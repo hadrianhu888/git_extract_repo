@@ -10,7 +10,10 @@
 *.pdb
 *.sh
 *.bat
+.git_secrets
 /.dist
 /.vs
 /.vscode
+/.vscode-test
+
 # ignore the following directories

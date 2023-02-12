@@ -1,0 +1,2 @@
+# git attributes
+git config --global core.attributesfile ~/.gitattributes
