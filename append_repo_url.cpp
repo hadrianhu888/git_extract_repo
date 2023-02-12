@@ -11,18 +11,10 @@
 
 #include "append_repo_url.hpp"
 
-void display_file(void) {
-    for (int i = 0; i < lines.size(); i++) {
-        cout << lines[i] << endl;
-    }
-}
-
 void open_file(void) {
-    check_file_exists();
     file.open("repo_urls.txt");
-    if (!file) {
+    if (!file.is_open()) {
         cout << "Error opening file" << endl;
-        exit(1);
     }
 }
 
@@ -35,107 +27,107 @@ void read_file(void) {
 void write_file(void) {
     ofstream new_file;
     new_file.open("clone_repo_urls.txt");
-    if (!new_file) {
+    if (!new_file.is_open()) {
         cout << "Error opening file" << endl;
-        exit(1);
     }
-    for (int i = 0; i < lines.size(); i++) {
-        new_file << lines[i] << endl;
+    new_file.close();
+}
+
+void append_file(void) {
+    ofstream new_file;
+    new_file.open("clone_repo_urls.txt", ios::app);
+    if (!new_file.is_open()) {
+        cout << "Error opening file" << endl;
     }
     new_file.close();
 }
 
 void append_git_clone(void) {
-    for (int i = 0; i < lines.size(); i++) {
-        lines[i] = "git clone " + lines[i];
+    ofstream new_file;
+    new_file.open("clone_repo_urls.txt", ios::app);
+    if (!new_file.is_open()) {
+        cout << "Error opening file" << endl;
     }
-}
-
-void output_results(void) {
     for (int i = 0; i < lines.size(); i++) {
-        cout << lines[i] << endl;
+        new_file << "git clone " << lines[i] << endl;
     }
+    new_file.close();
 }
 
 void close_file(void) {
     file.close();
 }
 
+void display_file(void) {
+    ifstream new_file;
+    new_file.open("clone_repo_urls.txt");
+    if (!new_file.is_open()) {
+        cout << "Error opening file" << endl;
+    }
+    while (getline(new_file, line)) {
+        cout << line << endl;
+    }
+    new_file.close();
+}
+
+void output_results(void) {
+    cout << "The file has been created" << endl;
+}
+
 void rename_file_directory(void) {
-    rename("clone_repo_urls.txt", "clone_repo_urls.sh");
+    int result = rename("clone_repo_urls.txt", "clone_repo_urls.sh");
+    if (result == 0) {
+        cout << "File successfully renamed" << endl;
+    } else {
+        cout << "Error renaming file" << endl;
+    }
 }
 
 void check_file_exists(void) {
-    if (file) {
-        cout << "File exists" << endl;
-    } else {
-        cout << "File does not exist" << endl;
-    }
-}
-
-void append_file(void) {
-    ofstream new_file;
-    new_file.open("repo_urls.txt", ios::app);
-    if (!new_file) {
+    ifstream new_file;
+    new_file.open("clone_repo_urls.txt");
+    if (!new_file.is_open()) {
         cout << "Error opening file" << endl;
-        exit(1);
     }
-    new_file << "clone_repo_urls.txt" << endl;
     new_file.close();
 }
 
 void compare_files(void) {
-    ifstream file1;
-    ifstream file2;
-    file1.open("repo_urls.txt");
-    file2.open("clone_repo_urls.txt");
-    if (!file1 || !file2) {
+    ifstream new_file;
+    new_file.open("clone_repo_urls.txt");
+    if (!new_file.is_open()) {
         cout << "Error opening file" << endl;
-        exit(1);
     }
-    while (getline(file1, line)) {
-        lines.push_back(line);
+    while (getline(new_file, line)) {
+        cout << line << endl;
     }
-    while (getline(file2, line)) {
-        lines.push_back(line);
-    }
-    for (int i = 0; i < lines.size(); i++) {
-        cout << lines[i] << endl;
-    }
+    new_file.close();
 }
 
 bool compare_file_diffs(void) {
-    ifstream file1;
-    ifstream file2;
-    file1.open("repo_urls.txt");
-    file2.open("clone_repo_urls.txt");
-    if (!file1 || !file2) {
+    ifstream new_file;
+    new_file.open("clone_repo_urls.txt");
+    if (!new_file.is_open()) {
         cout << "Error opening file" << endl;
-        exit(1);
     }
-    while (getline(file1, line)) {
-        lines.push_back(line);
+    while (getline(new_file, line)) {
+        cout << line << endl;
     }
-    while (getline(file2, line)) {
-        lines.push_back(line);
-    }
-    for (int i = 0; i < lines.size(); i++) {
-        cout << lines[i] << endl;
-    }
-    return true;
+    new_file.close();
 }
 
 int main(int argc, char **argv) {
     open_file();
     read_file();
-    append_git_clone();
     write_file();
+    append_file();
+    append_git_clone();
     close_file();
     display_file();
+    output_results();
     rename_file_directory();
-    append_file();
+    check_file_exists();
     compare_files();
     compare_file_diffs();
     return 0;
 }
-
