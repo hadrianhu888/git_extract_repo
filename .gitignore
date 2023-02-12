@@ -1,0 +1,15 @@
+# gitignores
+
+*.exe
+*.o
+*.def
+*.map
+*.lib
+*.dll
+*.txt
+*.pdb
+*.sh
+*.bat
+/.dist
+
+# ignore the following directories
